@@ -1,0 +1,23 @@
+{
+  "name": "aws-e2e-smoke-tests",
+  "version": "1.0.0",
+  "description": "Smoke Tests for  aws-e2e demo project",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "run": "node_modules/cypress/bin/cypress open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ud3sh/aws-e2e-smoke-tests.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ud3sh/aws-e2e-smoke-tests/issues"
+  },
+  "homepage": "https://github.com/ud3sh/aws-e2e-smoke-tests#readme",
+  "devDependencies": {
+    "cypress": "^9.5.3"
+  }
+}
