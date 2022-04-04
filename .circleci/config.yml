@@ -3,14 +3,10 @@ orbs:
   node: circleci/node@4.7.0
 jobs:
   build:
+    executor:
+      name: node/default
+      tag: '10.4'
     steps:
       - checkout
       - run: npm install
-      - run: ./node_modules/.bin/cypress run
-workflows:
-  build_and_publish:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only: /.*/
+      - run: npm run test
