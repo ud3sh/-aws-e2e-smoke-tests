@@ -1,0 +1,39 @@
+@startuml Sequence Diagram - Sprites
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v11.1/dist
+!includeurl AWSPuml/AWSCommon.puml
+!includeurl AWSPuml/Compute/all.puml
+!includeurl AWSPuml/ApplicationIntegration/APIGateway.puml
+!includeurl AWSPuml/General/Internetalt1.puml
+!includeurl AWSPuml/Database/DynamoDB.puml
+!includeurl AWSPuml/BusinessApplications/all.puml
+!includeurl AWSPuml/FrontEndWebMobile/all.puml
+
+'Comment out to use default PlantUML sequence formatting
+skinparam participant {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor AWS_BORDER_COLOR
+}
+'Hide the bottom boxes
+hide footbox
+
+actor User as user
+participant "<$Amplify>WebApp" as webapp
+participant "<$APIGateway>\nAPI Gateway\nAll methods are POST" as api
+participant "<color:#D86613><$Lambda></color>\nExpressionEvaluationFunction\nComputes expression, stores, and sends email" as lambda
+participant "ExpressionEvalDatabase\n<color:#3B48CC><$DynamoDB></color>\n{id, expression, result, email, create_time, created_by}" as db
+participant "<$SimpleEmailService>\nSimple EmailService" as ses
+participant "Email Server" as emailServer
+
+user -> webapp: Enter request
+webapp -> api: POST {expression, email}
+api -> lambda: Forward request
+lambda -> db: Stores Request and Result \n{id, expression, result, email, create_time, created_by}
+lambda -> ses: Request result sent via email
+lambda -> api: Returns\n{status,{id,expression,email,result}}
+ses -> emailServer: Send email to recipient
+api -> webapp: Forward response
+webapp -> user: Display result
+@enduml

@@ -6,7 +6,7 @@ export const testid = (testid, { visible = false, allowDisabled = false } = {}) 
 
 describe('Ensure expression is evaluated and email sent', () => {
     
-    let expression = "7 * 3 ^2 - 99";
+    let expression = "7 * 3^2 - 99";
     let serverId = "ahf125vr";
     let targetEmail  = `recipient@${serverId}.mailosaur.net`;
     let recievedAfterDate = new Date(Date.now() - 600 * 1000); //search only emails sent last min
@@ -15,11 +15,15 @@ describe('Ensure expression is evaluated and email sent', () => {
       cy.visit(WEB_SITE);      
       cy.get(`[test_id="expression_input"`).type(expression);
       cy.get(`[test_id="email_input"`).type(targetEmail);
-      cy.wait(200);
+      cy.wait(400);
       cy.get(`[test_id="expression_submit"`).click();
+      cy.wait(400);
     })
 
-    it('Receives the solution via email', () => {
+    it('Received the solution via email', () => {
+      let transactionId = cy.get(`[id="lastResponse"`)["last_result_id"];
+      let expectedSubject = `[${transactionId}] Your result for ${expression} is -36`;
+      console.log(expectedSubject);
       cy.mailosaurGetMessage(serverId, { sentTo: targetEmail}, {timeout: MAX_WAIT_TIME_MS, receivedAfter: recievedAfterDate}).then(email => {
           expect(email.subject).to.contains(expression);
           // Do something with the email body.  passwordResetLink = email.text.links[0].href;
