@@ -10,3 +10,10 @@ jobs:
       - checkout
       - run: npm install
       - run: ./node_modules/.bin/cypress run
+workflows:
+  build_and_publish:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: /.*/
